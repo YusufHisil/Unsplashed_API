@@ -1,0 +1,16 @@
+name: check code
+on: push
+
+jobs:
+  format-and-check-code:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - name: analyze code
+        run: flutter analyze
+      - name: check format
+        run: dart format -l 120 --set-exit-if-changed ./lib
