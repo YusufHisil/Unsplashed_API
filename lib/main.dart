@@ -99,6 +99,12 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  BoxShape markColor(String c)
+  {
+    if(color != c) return BoxShape.rectangle;
+    else return BoxShape.circle;
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -126,7 +132,13 @@ class _HomePageState extends State<HomePage> {
                     itemBuilder: (BuildContext context, int index) {
                       return GestureDetector(
                           onTap: () {
-                            setState(() => color = colors[index][0] as String);
+                            setState(() {
+                              if(color==colors[index][0] as String) {
+                                color = '';
+                              } else {
+                                color = colors[index][0] as String;
+                              }
+                            });
                             loadItems();
                           },
                           child: Card(
@@ -136,6 +148,7 @@ class _HomePageState extends State<HomePage> {
                                   decoration: BoxDecoration(
                                     color: colors[index][1] as Color,
                                     border: Border.all(),
+                                    shape: markColor(colors[index][0] as String),
                                   ))));
                     }),
               ),
@@ -153,7 +166,7 @@ class _HomePageState extends State<HomePage> {
             ),
             Expanded(
               child: CustomScrollView(controller: controller, slivers: <Widget>[
-                if (items.isEmpty)
+                if (items.isEmpty && !isLoading)
                   const SliverToBoxAdapter(
                     child: Center(child: Text('no items found')),
                   ),
